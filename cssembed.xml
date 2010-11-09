@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project default="test" basedir="." xmlns:ca="antlib:net.sourceforge.clearantlib">
+
+	<property name="task.dir" location="${basedir}/anttask/" />
+	<property name="temp.dir" location="${task.dir}/temp" />
+	
+	<property name="images.dir" location="${temp.dir}/images" />
+	<property name="from.dir" location="${temp.dir}/from" />
+	<property name="dest.dir" location="${temp.dir}/dest" />
+	<property name="bin.dir" location="${temp.dir}/bin" />
+	<property name="src.dir" location="${basedir}/src" />	
+	
+	<target name="clean">
+		<delete dir="${temp.dir}" />
+    </target>
+	
+	<target name="setup" depends="clean">
+		<mkdir dir="${temp.dir}"/>
+		<mkdir dir="${from.dir}"/>
+		<mkdir dir="${dest.dir}"/>
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${images.dir}"/>
+		
+		<copy todir="${from.dir}" >
+			<fileset dir="${task.dir}" includes="*.css" />
+  		</copy>
+  			
+		<copy todir="${images.dir}" >
+			<fileset dir="${task.dir}" includes="*.png, *.jpg" />
+  		</copy>
+	</target>
+	
+	<target name="makeTask" depends="setup">
+		
+		<path id="cssembed.classpath">
+			<pathelement path="${bin.dir}"/>
+			<fileset dir="${basedir}/lib" includes="*.jar"/>
+			<fileset dir="${task.dir}/lib" includes="*.jar"/>
+		</path>
+				
+		<javac destdir="${bin.dir}" srcdir="${src.dir}" includes="**/*.java" classpathref="cssembed.classpath"/>    
+		
+		<taskdef name="cssurlembed" classname="net.nczonline.web.cssembed.CSSEmbedAntTask" >
+			<classpath refid="cssembed.classpath" />
+		</taskdef>
+	</target>
+
+	<target name="test" depends="makeTask" >
+
+		<cssurlembed charset="ISO-8859-1" root="${temp.dir}" fromdir="${from.dir}" destdir="${dest.dir}" suffix="-datauri" verbose="true">
+			<include name="*.css"/>	
+		</cssurlembed>
+				
+	</target>
+</project>
