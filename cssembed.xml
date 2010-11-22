@@ -47,7 +47,7 @@
 
 	<target name="test" depends="makeTask" >
 
-		<cssurlembed charset="ISO-8859-1" root="${temp.dir}" fromdir="${from.dir}" destdir="${dest.dir}" suffix="-datauri" verbose="true">
+		<cssurlembed mhtml="true" charset="ISO-8859-1" root="${temp.dir}" fromdir="${from.dir}" destdir="${dest.dir}" suffix="-datauri" verbose="true">
 			<include name="*.css"/>	
 		</cssurlembed>
 				

@@ -49,6 +49,7 @@ public class CSSEmbedAntTask extends MatchingTask
     private String charset = "UTF-8";    
     private boolean verbose = false;   
     private boolean mhtml = false;
+    private String mhtmlRoot = null;
     
     //--------------------------------------------------------------------------
     // Attributes
@@ -116,6 +117,11 @@ public class CSSEmbedAntTask extends MatchingTask
     {
         this.mhtml = mhtml;
     }
+    
+    public void setMhtmlRoot(String mhtmlRoot)
+    {
+        this.mhtmlRoot = mhtmlRoot;
+    }    
 
     //--------------------------------------------------------------------------
     // Execute
@@ -161,6 +167,11 @@ public class CSSEmbedAntTask extends MatchingTask
                 //close in case writing to the same file
                 in.close();
                 in = null;
+                
+                if(mhtmlRoot != null)
+                {
+                    embedder.setMHTMLRoot(mhtmlRoot);
+                }
                 
                 embedder.setFilename(outFile.getName());
                 
